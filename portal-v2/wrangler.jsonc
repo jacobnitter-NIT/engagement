@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "autonord-engagement",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-01-01",
+  "workers_dev": true,
+  "assets": {"directory": "./public", "binding": "ASSETS", "run_worker_first": true},
+  "d1_databases": [{"binding": "DB", "database_name": "autonord-engagement", "database_id": "482cad6e-1fe7-4fd6-820e-d3b37a7ed89a", "migrations_dir": "migrations", "migrations_table": "an2_migrations"}],
+  "limits": {"cpu_ms": 100},
+  "observability": {"enabled": true}
+}

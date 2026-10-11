@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS an2_config (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS an2_accounts (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, role TEXT NOT NULL CHECK(role IN ('admin','employee')), salt TEXT NOT NULL, password_hash TEXT NOT NULL);
+CREATE UNIQUE INDEX IF NOT EXISTS an2_one_admin ON an2_accounts(role) WHERE role='admin';
+CREATE TABLE IF NOT EXISTS an2_sessions (token_hash TEXT PRIMARY KEY, account_id TEXT NOT NULL REFERENCES an2_accounts(id), expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS an2_departments (id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE);
+CREATE TABLE IF NOT EXISTS an2_employees (email TEXT PRIMARY KEY, department_id TEXT NOT NULL REFERENCES an2_departments(id));
+CREATE TABLE IF NOT EXISTS an2_surveys (id TEXT PRIMARY KEY, title TEXT NOT NULL, year INTEGER NOT NULL, status TEXT NOT NULL CHECK(status IN ('draft','active','closed')), invite TEXT NOT NULL UNIQUE, data TEXT NOT NULL);
+CREATE UNIQUE INDEX IF NOT EXISTS an2_one_active ON an2_surveys(status) WHERE status='active';
+CREATE TABLE IF NOT EXISTS an2_participants (survey_id TEXT NOT NULL REFERENCES an2_surveys(id), email TEXT NOT NULL, department_id TEXT NOT NULL REFERENCES an2_departments(id), complete INTEGER NOT NULL DEFAULT 0 CHECK(complete IN (0,1)), PRIMARY KEY(survey_id,email));
+CREATE TABLE IF NOT EXISTS an2_responses (response_id TEXT PRIMARY KEY, survey_id TEXT NOT NULL REFERENCES an2_surveys(id), department_id TEXT NOT NULL REFERENCES an2_departments(id), answers TEXT NOT NULL, complete INTEGER NOT NULL CHECK(complete IN (0,1)));
+CREATE TABLE IF NOT EXISTS an2_actions (id TEXT PRIMARY KEY, data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS an2_attempts (key TEXT PRIMARY KEY, count INTEGER NOT NULL, expires INTEGER NOT NULL);
