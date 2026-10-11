@@ -2,11 +2,11 @@
   "name": "autonord-people", "version": "2.0.0", "private": true, "type": "module",
   "engines": {"node": ">=22.13"},
   "scripts": {
-    "dev": "wrangler dev", "check": "node --check src/worker.mjs && node --check public/app.js",
+    "dev": "wrangler dev --config wrangler.jsonc", "check": "node --check src/worker.mjs && node --check public/app.js",
     "test": "node --test tests/portal.test.mjs", "build": "npm run check",
-    "deploy:check": "npm run check && npm test && wrangler deploy --dry-run",
-    "db:migrate": "wrangler d1 migrations apply DB --remote",
-    "deploy": "wrangler deploy", "release": "npm run deploy:check && npm run db:migrate && npm run deploy"
+    "deploy:check": "npm run check && npm test && wrangler deploy --dry-run --config wrangler.jsonc",
+    "db:migrate": "wrangler d1 migrations apply DB --remote --config wrangler.jsonc",
+    "deploy": "wrangler deploy --config wrangler.jsonc", "release": "npm run deploy:check && npm run db:migrate && npm run deploy"
   },
   "devDependencies": {"wrangler": "4.92.0"}
 }
