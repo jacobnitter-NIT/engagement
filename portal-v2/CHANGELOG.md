@@ -1,3 +1,11 @@
+# 2.1.0
+
+- Tilføj, fjern og rediger alle spørgsmål samt svartype og tema i kladder.
+- Vælg deltagere pr. undersøgelse fra fælles medarbejdergrunddata.
+- Grunddata kan opdateres uden at ændre aktive deltagerlister.
+- Test med få deltagere; anonymitetsgrænser gælder fortsat.
+- Engagementindeks udelades uden alle fem kernespørgsmål; eNPS udelades uden eNPS-spørgsmål.
+
 # 2.0.1
 
 - Privat opsætningslink genereres automatisk under release.

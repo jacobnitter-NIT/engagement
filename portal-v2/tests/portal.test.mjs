@@ -17,9 +17,9 @@ assert.equal((await admin.request('/api/admin',{op:'saveSurvey',id:s.id,title:'A
 assert.equal((await admin.request('/api/admin',{op:'activate',id:s.id})).body.error,'EMPLOYEES_REQUIRED');
 const emails=Array.from({length:12},(_,i)=>`employee${i}@example.com`);
 await admin.request('/api/admin',{op:'employees',department:d1,emails:emails.slice(0,6).join('\n')});await admin.request('/api/admin',{op:'employees',department:d2,emails:emails.slice(6).join(';')});
-assert.equal((await admin.request('/api/admin',{op:'activate',id:s.id})).status,200);
+s.data.selectedEmployees=emails;await admin.request('/api/admin',{op:'saveSurvey',id:s.id,title:s.title,year:2026,data:s.data});assert.equal((await admin.request('/api/admin',{op:'activate',id:s.id})).status,200);
 assert.equal((await admin.request('/api/report',{id:s.id})).body.error,'REPORT_AFTER_CLOSE');
-assert.equal((await admin.request('/api/admin',{op:'employees',department:d1,emails:'extra@example.com'})).body.error,'EMPLOYEES_LOCKED');
+assert.equal((await admin.request('/api/admin',{op:'employees',department:d1,emails:'extra@example.com'})).status,200);
 assert.equal((await admin.request('/api/admin',{op:'saveSurvey',id:s.id,title:s.title,year:2026,data:s.data})).body.error,'QUESTIONS_LOCKED');
 const stranger=client(env);assert.equal((await stranger.request('/api/register',{invite:s.invite,email:'unknown@example.com',password:'employee-password-123'})).status,403);
 const clients=[];
@@ -48,9 +48,9 @@ test('all admin and employee screens render in all three languages without runti
  const ctx=createContext({console,URLSearchParams,URL,Intl,Date,JSON,Math,Number,String,Object,Array,Set,Map,structuredClone,crypto,location:{search:'',origin:'https://portal.test'},localStorage:{getItem(){return null;},setItem(){}},document:{getElementById:id=>elements[id],addEventListener(){},documentElement:{},title:''},window:{addEventListener(){}},setInterval(){},setTimeout(){},clearTimeout(){}});
  const script=readFileSync(new URL('../public/app.js',import.meta.url),'utf8').replace("import {translate,errorText} from './i18n.js';",'').replace(/\nboot\(\);\s*$/,'');
  ctx.translate=(lang,key)=>dictionaries[lang][key]||key;ctx.errorText=()=>'';runInContext(script,ctx);
- const q=newSurvey();ctx.fixture={surveys:[{id:'survey',title:'Autonord 2026',year:2026,status:'draft',invite:'invite',data:q}],departments:[{id:'dept',name:'Værksted'}],employees:[],participants:[],actions:[]};
+ const q=newSurvey();ctx.fixture={surveys:[{id:'survey',title:'Autonord 2026',year:2026,status:'draft',invite:'invite',data:q}],departments:[{id:'dept',name:'Værksted'}],employees:[{email:'selected@example.com',department_id:'dept'},{email:'excluded@example.com',department_id:'dept'}],participants:[],actions:[]};ctx.fixture.surveys[0].data.selectedEmployees=['selected@example.com'];
  runInContext("data=fixture;selectedId='survey';session={user:{role:'admin',email:'owner@example.com'},initialized:true};",ctx);
- for(const language of ['da','en','kl']){runInContext(`lang='${language}'`,ctx);for(const screen of ['overview','surveys','reports','actions','organisation','settings']){runInContext(`page='${screen}';render()`,ctx);assert.ok(elements.app.innerHTML.includes('autonord'));assert.ok(!elements.app.innerHTML.includes('undefined'));}runInContext("session={initialized:false,setupReady:true};renderAuth()",ctx);assert.ok(!elements.app.innerHTML.includes('name="setupToken"'));assert.ok(elements.app.innerHTML.includes('data-form="setup"'));assert.ok(elements.app.innerHTML.includes('disabled'));runInContext("setupToken='test-link-key';renderAuth()",ctx);assert.ok(!elements.app.innerHTML.includes('type="submit" disabled'));runInContext("setupToken=''",ctx);runInContext("surveyView={survey:{id:'survey',title:'Autonord',year:2026,status:'active',questions:fixture.surveys[0].data.questions,description:fixture.surveys[0].data.description},user:null,answers:{}};renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('employee-login'));runInContext("surveyView.user={email:'employee@example.com',complete:false};renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('data-answer="e1"'));runInContext("submitted=true;renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('editAnswers'));runInContext("submitted=false;session={user:{role:'admin',email:'owner@example.com'},initialized:true};",ctx);}
+ for(const language of ['da','en','kl']){runInContext(`lang='${language}'`,ctx);for(const screen of ['overview','surveys','reports','actions','organisation','settings']){runInContext(`page='${screen}';render()`,ctx);assert.ok(elements.app.innerHTML.includes('autonord'));assert.ok(!elements.app.innerHTML.includes('undefined'));if(screen==='surveys'){assert.match(elements.app.innerHTML,/value="selected@example.com"[^>]*checked/);assert.doesNotMatch(elements.app.innerHTML,/value="excluded@example.com"[^>]*checked/);assert.ok(elements.app.innerHTML.includes('data-remove-q="e1"'));assert.ok(elements.app.innerHTML.includes('data-remove-q="enps"'));assert.ok(elements.app.innerHTML.includes('data-q-type'));}}runInContext("session={initialized:false,setupReady:true};renderAuth()",ctx);assert.ok(!elements.app.innerHTML.includes('name="setupToken"'));assert.ok(elements.app.innerHTML.includes('data-form="setup"'));assert.ok(elements.app.innerHTML.includes('disabled'));runInContext("setupToken='test-link-key';renderAuth()",ctx);assert.ok(!elements.app.innerHTML.includes('type="submit" disabled'));runInContext("setupToken=''",ctx);runInContext("surveyView={survey:{id:'survey',title:'Autonord',year:2026,status:'active',questions:fixture.surveys[0].data.questions,description:fixture.surveys[0].data.description},user:null,answers:{}};renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('employee-login'));runInContext("surveyView.user={email:'employee@example.com',complete:false};renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('data-answer="e1"'));runInContext("submitted=true;renderEmployee()",ctx);assert.ok(elements.app.innerHTML.includes('editAnswers'));runInContext("submitted=false;session={user:{role:'admin',email:'owner@example.com'},initialized:true};",ctx);}
 });
 
 test('release generates a private setup link without asking for a key or exposing it in command arguments',async()=>{
@@ -61,4 +61,28 @@ test('release generates a private setup link without asking for a key or exposin
  const existingCalls=[],existingLogs=[];await release({run:(p,args,input)=>existingCalls.push({args,input}),request:async()=>({ok:true,json:async()=>({initialized:true})}),log:line=>existingLogs.push(line),random:()=>{throw Error('Should not generate key');}});
  assert.equal(existingCalls.length,3);assert.ok(existingLogs.every(line=>!line.includes('#setup=')));
  const failedLogs=[];await assert.rejects(()=>release({run:()=>{throw Error('Build failed');},log:l=>failedLogs.push(l)}));assert.equal(failedLogs.length,0);
+});
+
+test('editable questions and selected participants isolate a small test from employee master data',async()=>{
+ const {env,admin}=await setup();let state=(await admin.request('/api/admin')).body;const s=state.surveys[0],dept=state.departments[0].id,otherDept=state.departments[1].id;
+ const emails=['test-one@example.com','test-two@example.com','not-selected@example.com'];
+ await admin.request('/api/admin',{op:'employees',department:dept,emails:emails.join('\n')});
+ const surveyData={...s.data,klApproved:true,selectedEmployees:[],questions:[{...s.data.questions.find(q=>q.id==='m1'),da:'Mit nye spørgsmål',en:'My revised question',kl:'Apeqqut nutaaq'},{id:'custom-test',type:'text',theme:'open',da:'Testkommentar',en:'Test comment',kl:'Oqaaseqaat'}]};
+ const save=()=>admin.request('/api/admin',{op:'saveSurvey',id:s.id,title:'Test på to medarbejdere',year:2026,data:surveyData});
+ assert.equal((await save()).status,200);assert.equal((await admin.request('/api/admin',{op:'activate',id:s.id})).body.error,'EMPLOYEES_REQUIRED');
+ surveyData.selectedEmployees=['unknown@example.com'];assert.equal((await save()).body.error,'EMPLOYEE_SELECTION_INVALID');
+ surveyData.selectedEmployees=[emails[0],emails[1]];assert.equal((await save()).status,200);
+ state=(await admin.request('/api/admin')).body;assert.deepEqual(state.surveys[0].data.selectedEmployees,emails.slice(0,2));assert.equal(state.surveys[0].data.questions.length,2);assert.equal(state.surveys[0].data.questions[0].da,'Mit nye spørgsmål');
+ assert.equal((await admin.request('/api/admin',{op:'activate',id:s.id})).status,200);
+ state=(await admin.request('/api/admin')).body;assert.equal(state.employees.length,3);assert.deepEqual(state.participants.map(p=>p.email).sort(),emails.slice(0,2));
+ const excluded=client(env);assert.equal((await excluded.request('/api/register',{invite:s.invite,email:emails[2],password:'employee-password-123'})).body.error,'NOT_INVITED');
+ const included=client(env);assert.equal((await included.request('/api/register',{invite:s.invite,email:emails[0],password:'employee-password-123'})).status,200);
+ assert.equal((await included.request('/api/survey/'+s.invite)).body.survey.questions[0].da,'Mit nye spørgsmål');assert.equal((await included.request('/api/survey/'+s.invite,{answers:{m1:5,'custom-test':'Feedback'},complete:true})).status,200);
+ // Changing and removing master data leaves the active participant snapshot and access intact.
+ await admin.request('/api/admin',{op:'employees',department:otherDept,emails:emails[0]+'\nnew-master@example.com'});await admin.request('/api/admin',{op:'removeEmployee',email:emails[0]});
+ state=(await admin.request('/api/admin')).body;assert.equal(state.participants.find(p=>p.email===emails[0]).department_id,dept);assert.equal(state.participants.length,2);assert.equal((await included.request('/api/survey/'+s.invite,{answers:{m1:4},complete:true})).status,200);
+ assert.equal((await save()).body.error,'QUESTIONS_LOCKED');
+ await admin.request('/api/admin',{op:'close',id:s.id});assert.equal((await admin.request('/api/report',{id:s.id})).body.suppressed,true);
+ const result=aggregate(surveyData,Array.from({length:5},()=>({answers:JSON.stringify({m1:5,enps:10})})));assert.equal(result.index,null);assert.equal(result.enps,null);
+ await admin.request('/api/admin',{op:'newSurvey',year:2027});state=(await admin.request('/api/admin')).body;assert.deepEqual(state.surveys.find(x=>x.year===2027).data.selectedEmployees,[]);
 });

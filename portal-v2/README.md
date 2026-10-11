@@ -60,19 +60,19 @@ GitHub-workflowet `Autonord People checks` kører tests automatisk ved ændringe
 
 1. Åbn opsætningslinket fra `npm run release`, og opret din administratorkonto én gang.
 2. I **Organisation**: tilføj medarbejdernes e-mails til Værksted, Pladeværksted, Administration eller Lager. Tilføj andre afdelinger efter behov. Flere e-mails kan indsættes samlet.
-3. I **Undersøgelser**: rediger årets kladde, tilføj egne spørgsmål og oversæt alle spørgsmål. Forhåndsvis hele spørgerammen. Gem dine ændringer.
+3. I **Undersøgelser**: rediger årets kladde: tilføj, fjern eller rediger alle spørgsmål, svartype og tema, og oversæt alle spørgsmål. Vælg deltagerne med afkrydsning under **Deltagere i undersøgelsen**. Nye undersøgelser starter uden valgte deltagere. Forhåndsvis hele spørgerammen. Gem dine ændringer.
 4. Få de grønlandske tekster gennemgået af en kvalificeret sprogbruger, og markér godkendelsen. De indbyggede tekster er udkast.
 5. Aktivér undersøgelsen og kopiér medarbejderlinket. Send det selv til medarbejderne. Portalen sender ikke mails automatisk.
-6. Medarbejdere på listen opretter e-mail/adgangskode via linket, får svar automatisk gemt, kan vende tilbage og ændre svar indtil lukning. Eksisterende medarbejderkonti kan bruges ved næste års undersøgelse.
+6. De valgte medarbejdere opretter e-mail/adgangskode via linket, får svar automatisk gemt, kan vende tilbage og ændre svar indtil lukning. Eksisterende medarbejderkonti kan bruges ved næste års undersøgelse.
 7. Dashboard viser svarprocent og deltagelse pr. afdeling hvert 15. sekund. Medarbejderlisten fastlåses ved aktivering; en snapshot gemmes pr. undersøgelse.
 8. Luk undersøgelsen for at åbne rapporter. Eksportér indeksresultater som CSV eller brug Udskriv/PDF.
 9. Opret handlinger med ansvarlig, deadline, afdeling, undersøgelse, status og opfølgningsnoter. Brug kolonnerne Planlagt, I gang og Gennemført.
 
 ## Metode og reference
 
-Der er 22 spørgsmål: fem engagementsspørgsmål, fem motivationsfaktorer, otte vedligeholdelsesfaktorer, ét eNPS-spørgsmål og tre åbne spørgsmål. Egne skala- og tekstspørgsmål kan tilføjes; spørgsmål fastlåses ved aktivering.
+Der er 22 spørgsmål: fem engagementsspørgsmål, fem motivationsfaktorer, otte vedligeholdelsesfaktorer, ét eNPS-spørgsmål og tre åbne spørgsmål. Alle spørgsmål kan redigeres eller fjernes i kladder. Skala-, tekst- og eNPS-spørgsmål kan tilføjes (højst ét eNPS-spørgsmål). Spørgsmål og valgte deltagere fastlåses ved aktivering. Grunddata kan fortsat opdateres uden at ændre tidligere eller aktive deltagerlister.
 
-- Engagement: egne danske tilpasninger af fem engagementstemaer fra den britiske **Civil Service People Survey**. Svarkategorien 1–5 omsættes til 0, 25, 50, 75, 100. Indekset er det uvægtede gennemsnit af de fem spørgsmåls gennemsnit. Alle fem skal have mindst fem gyldige svar.
+- Engagement: egne danske tilpasninger af fem engagementstemaer fra den britiske **Civil Service People Survey**. Svarkategorien 1–5 omsættes til 0, 25, 50, 75, 100. Indekset er det uvægtede gennemsnit af de fem spørgsmåls gennemsnit. Alle fem skal være til stede med engagement som tema og skala 1–5 og have mindst fem gyldige svar. Fjernes et af de fem spørgsmål, vises intet engagementindeks. Redigerede formuleringer kan ændre sammenligneligheden over tid.
 - Motivations- og vedligeholdelsesfaktorer: egne spørgsmål struktureret efter **Herzbergs tofaktorteori**, med danske arbejdsmiljøtemaer som indflydelse, udvikling, ledelse, samarbejde og belastning. Det er en tilpasset ledelsesramme; det er ikke NFA’s validerede DPQ/COPSOQ-skalaer.
 - eNPS: procent ambassadører (9–10) minus procent kritikere (0–6). Passive er 7–8. Indekset går fra −100 til +100. Ved ikke/ikke relevant udelades.
 - En ekstern reference på 0–100 kan indtastes med navn, kilde, population og år. Portalen opfinder ingen benchmarktal. Rammen er **ikke Ennovas officielle EEI**, og en reference er ikke dokumentation for direkte sammenlignelighed. En direkte EEI-benchmark kræver den relevante metode og sammenlignelige referencepopulation.
@@ -107,3 +107,7 @@ Der er ingen automatisk mailverifikation eller selvbetjent glemt-adgangskode-mai
 - Ens oversættelsesnøgler i dansk, engelsk og grønlandsk.
 
 `npm run deploy:check` omfatter også syntaxkontrol og Cloudflares Worker-bundling uden udgivelse. Browserbaseret visuel QA og login på den rigtige Cloudflare-host skal foretages efter deploy; det er ikke verificeret med de lokale API-tests alene.
+
+## Test med få medarbejdere
+
+Opret en kladde, vælg kun dine testmedarbejdere, og aktivér. Grunddata bevares til den rigtige undersøgelse. Luk testen, før du aktiverer næste undersøgelse. Rapporternes grænse på fem svar gælder også ved tests. Eksisterende kladder uden et gemt deltagervalg viser alle nuværende medarbejdere markeret; gem et eksplicit valg før aktivering.
