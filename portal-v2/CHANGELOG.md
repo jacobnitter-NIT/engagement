@@ -1,3 +1,13 @@
+# 2.2.0
+
+- Selvtilmelding via fælles link med e-mail, adgangskode og eget afdelingsvalg.
+- Ingen medarbejdergrunddata eller administrativ deltagerudvælgelse.
+- Eksisterende konti kan tilmelde sig næste undersøgelse.
+- Alle afdelingsrapporter åbnes uden en minimumsgrænse; afdelingstal er udeladt fra API og eksport.
+- Samlede dashboardtal, valgfrit forventet antal og deltagelsesstatus.
+- Fortrolighedstekst forklarer små afdelingers begrænsede anonymitet; åbne kommentarer vises kun samlet ved fem kommentarer.
+- Eksisterende login og svar bevares.
+
 # 2.1.0
 
 - Tilføj, fjern og rediger alle spørgsmål samt svartype og tema i kladder.

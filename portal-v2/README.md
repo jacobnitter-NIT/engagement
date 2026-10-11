@@ -58,21 +58,20 @@ GitHub-workflowet `Autonord People checks` kører tests automatisk ved ændringe
 
 ## Brug portalen
 
-1. Åbn opsætningslinket fra `npm run release`, og opret din administratorkonto én gang.
-2. I **Organisation**: tilføj medarbejdernes e-mails til Værksted, Pladeværksted, Administration eller Lager. Tilføj andre afdelinger efter behov. Flere e-mails kan indsættes samlet.
-3. I **Undersøgelser**: rediger årets kladde: tilføj, fjern eller rediger alle spørgsmål, svartype og tema, og oversæt alle spørgsmål. Vælg deltagerne med afkrydsning under **Deltagere i undersøgelsen**. Nye undersøgelser starter uden valgte deltagere. Forhåndsvis hele spørgerammen. Gem dine ændringer.
-4. Få de grønlandske tekster gennemgået af en kvalificeret sprogbruger, og markér godkendelsen. De indbyggede tekster er udkast.
-5. Aktivér undersøgelsen og kopiér medarbejderlinket. Send det selv til medarbejderne. Portalen sender ikke mails automatisk.
-6. De valgte medarbejdere opretter e-mail/adgangskode via linket, får svar automatisk gemt, kan vende tilbage og ændre svar indtil lukning. Eksisterende medarbejderkonti kan bruges ved næste års undersøgelse.
-7. Dashboard viser svarprocent og deltagelse pr. afdeling hvert 15. sekund. Medarbejderlisten fastlåses ved aktivering; en snapshot gemmes pr. undersøgelse.
-8. Luk undersøgelsen for at åbne rapporter. Eksportér indeksresultater som CSV eller brug Udskriv/PDF.
-9. Opret handlinger med ansvarlig, deadline, afdeling, undersøgelse, status og opfølgningsnoter. Brug kolonnerne Planlagt, I gang og Gennemført.
+1. Log ind med din eksisterende administratorkonto.
+2. I **Afdelinger**: vedligehold listen. Standard: Værksted, Pladeværksted, Administration og Lager. Der er ingen medarbejdergrunddata eller deltagerudvælgelse.
+3. I **Undersøgelser**: tilføj, rediger eller fjern spørgsmål og oversæt alle tre sprog. Angiv eventuelt samlet forventet medarbejderantal for svarprocenten. Godkend de grønlandske tekster, og aktivér.
+4. Kopiér det fælles medarbejderlink og send det selv. Portalen sender ikke mails automatisk.
+5. Medarbejderen vælger afdeling, e-mail og adgangskode i samme formular og går direkte til spørgsmålene. Kontoen er unik pr. e-mail, og der er én besvarelse pr. konto pr. undersøgelse. Afdelingen gemmes ved første deltagelse i undersøgelsen.
+6. Medarbejderen kan logge ind via samme link og gemme, fortsætte eller ændre svar indtil lukning. Eksisterende konti kan deltage i en ny undersøgelse uden en ny konto; vælg afdeling for den nye undersøgelse.
+7. Dashboardet viser samlet antal tilmeldte og gennemførte samt samlet deltagelsesstatus. Svarprocenten bruger det forventede antal, hvis det er indtastet. Der er ingen afdelingsstatistik eller tilknytning mellem medarbejder og afdeling i administratorens visning.
+8. Luk undersøgelsen for at åbne rapporterne. Samlet rapport og alle afdelinger er tilgængelige uanset antal svar. Afdelinger uden gyldige svar viser ingen score. Afdelingernes svarantal er udeladt fra skærm, CSV, print og rapport-API.
 
 ## Metode og reference
 
-Der er 22 spørgsmål: fem engagementsspørgsmål, fem motivationsfaktorer, otte vedligeholdelsesfaktorer, ét eNPS-spørgsmål og tre åbne spørgsmål. Alle spørgsmål kan redigeres eller fjernes i kladder. Skala-, tekst- og eNPS-spørgsmål kan tilføjes (højst ét eNPS-spørgsmål). Spørgsmål og valgte deltagere fastlåses ved aktivering. Grunddata kan fortsat opdateres uden at ændre tidligere eller aktive deltagerlister.
+Der er 22 spørgsmål: fem engagementsspørgsmål, fem motivationsfaktorer, otte vedligeholdelsesfaktorer, ét eNPS-spørgsmål og tre åbne spørgsmål. Alle spørgsmål kan redigeres eller fjernes i kladder. Skala-, tekst- og eNPS-spørgsmål kan tilføjes (højst ét eNPS-spørgsmål). Spørgsmål fastlåses ved aktivering. Afdelingen gemmes ved medarbejderens første deltagelse i undersøgelsen.
 
-- Engagement: egne danske tilpasninger af fem engagementstemaer fra den britiske **Civil Service People Survey**. Svarkategorien 1–5 omsættes til 0, 25, 50, 75, 100. Indekset er det uvægtede gennemsnit af de fem spørgsmåls gennemsnit. Alle fem skal være til stede med engagement som tema og skala 1–5 og have mindst fem gyldige svar. Fjernes et af de fem spørgsmål, vises intet engagementindeks. Redigerede formuleringer kan ændre sammenligneligheden over tid.
+- Engagement: egne danske tilpasninger af fem engagementstemaer fra den britiske **Civil Service People Survey**. Svarkategorien 1–5 omsættes til 0, 25, 50, 75, 100. Indekset er det uvægtede gennemsnit af de fem spørgsmåls gennemsnit. Alle fem skal være til stede med engagement som tema og skala 1–5 og have mindst ét gyldigt svar hver. Fjernes et af de fem spørgsmål, vises intet engagementindeks. Redigerede formuleringer kan ændre sammenligneligheden over tid.
 - Motivations- og vedligeholdelsesfaktorer: egne spørgsmål struktureret efter **Herzbergs tofaktorteori**, med danske arbejdsmiljøtemaer som indflydelse, udvikling, ledelse, samarbejde og belastning. Det er en tilpasset ledelsesramme; det er ikke NFA’s validerede DPQ/COPSOQ-skalaer.
 - eNPS: procent ambassadører (9–10) minus procent kritikere (0–6). Passive er 7–8. Indekset går fra −100 til +100. Ved ikke/ikke relevant udelades.
 - En ekstern reference på 0–100 kan indtastes med navn, kilde, population og år. Portalen opfinder ingen benchmarktal. Rammen er **ikke Ennovas officielle EEI**, og en reference er ikke dokumentation for direkte sammenlignelighed. En direkte EEI-benchmark kræver den relevante metode og sammenlignelige referencepopulation.
@@ -83,17 +82,17 @@ Kilder:
 - [NFA — Dansk Psykosocialt Spørgeskema](https://www.nfa.dk/vaerktoejer/spoergeskemaer/dansk-psykosocialt-spoergeskema-dpq-et-spoergeskema-om-det-psykiske-arbejdsmiljoe)
 - [Bain — Net Promoter Score](https://www.bain.com/insights/nps-the-next-six-sigma-the-net-promoter-score/)
 
-## Svar og fortrolighed
+## Fortrolighed og skjulte afdelingstal
 
-Administratorens API og skærmbilleder viser deltagelsesstatus med e-mail, men giver ingen adgang til individuelle svar. Rapporternes svar indeholder ikke e-mail, kontoid eller navn. Resultater åbnes først efter lukning og kræver mindst fem besvarelser. Hvert spørgsmål kræver desuden mindst fem gyldige svar. Afdelingsrapporter skjules også ved én lille afdeling, hvis resultatet ellers kunne udledes ved at trække de store afdelinger fra totalen.
+Administrator ser e-mail og gennemførelsesstatus, men har ingen visning af individuelle svar eller deltagernes afdeling. Afdelingsrapportens API udelader `count`, spørgsmålsantal, svarfordelinger og eNPS-gruppernes antal. eNPS vises som score. Samlet antal gennemførte vises fortsat for hele undersøgelsen.
 
-Åbne svar vises kun i den samlede rapport og ved mindst fem ikke-tomme kommentarer til samme spørgsmål. De sorteres uafhængigt mellem spørgsmål; ingen samlet individuel svarrække leveres. Medarbejderne får besked om at undgå navne og identificerende detaljer.
+Afdelingsresultater beregnes uanset antal svar. I små afdelinger kan scoren afspejle enkelte personer. Skjulte antal garanterer derfor ikke anonymitet, og resultater kan også give mulighed for indirekte udledning. Medarbejderne informeres om dette før besvarelse. Løsningen beskrives som fortrolig.
 
-**Teknisk er besvarelserne pseudonymiserede**, fordi gem/genoptag og ændring kræver en stabil forbindelse. En HMAC-nøgle oprettes kryptografisk ved opsætning og gemmes i `an2_config`. En databaseoperatør med adgang til denne nøgle kan genberegne koblingen. Portalen tilbyder anonyme rapporter for ledelsen, ikke irreversibel anonymisering over for databaseoperatøren. Begræns Cloudflare/D1-adgang til betroede administratorer. Ændr ikke `response_secret` efter opstart.
+Åbne svar vises kun i den samlede rapport ved mindst fem ikke-tomme kommentarer til samme spørgsmål. De sorteres uafhængigt, og der leveres ikke individuelle svarrækker. Medarbejderne opfordres til at undgå identificerende detaljer.
 
-Sessions lagres med hashede tokens, HttpOnly/Secure/SameSite-cookie og otte timers levetid. POST kræver samme origin. Adgangskoder hashes med saltet PBKDF2, 100.000 iterationer. Login er begrænset pr. IP og e-mail. Adgangskodeskift tilbagekalder gamle sessions.
+Teknisk lagres svar med en HMAC-baseret pseudonymnøgle, der muliggør genoptagelse. Databaseoperatøren kan stadig sammenkoble oplysningerne med adgang til databasen og nøglen. Afdelingstal skjules i portal/API/eksport, men er ikke hemmelige for en operatør med direkte databaseadgang.
 
-Der er ingen automatisk mailverifikation eller selvbetjent glemt-adgangskode-mail. En e-mail skal stå på den fastlåste medarbejderliste for at registrere sig og besvare. Den første, der registrerer den inviterede e-mail, ejer kontoen; del derfor undersøgelseslinket direkte internt, og brug medarbejdernes egne e-mailadresser. Aftal adgang, opbevaring og sletning af data før den første rigtige undersøgelse.
+Der er ingen e-mailverifikation eller kontrol af ansættelse. Enhver med det aktive link kan tilmelde sig; del linket internt. Eksisterende adgangskoder bruger fortsat saltet PBKDF2 og sikre sessionscookies.
 
 ## Test
 
@@ -101,7 +100,7 @@ Der er ingen automatisk mailverifikation eller selvbetjent glemt-adgangskode-mai
 
 - Førstegangsopsætning, login med forkert Cloudflare-e-mail, session/logout og adgangskodeskift.
 - Forkert opsætningsnøgle, manglende binding, adgangskodekrav, CSRF og rate limiting.
-- Aktivering, låst medarbejderliste/spørgsmål, registrering, kladde, genoptagelse, indsendelse, ændring og lukning.
+- Aktivering uden medarbejderliste, selvtilmelding, afdelingsvalg, kladde, genoptagelse, indsendelse, ændring og lukning.
 - Engagement, eNPS, ukendt/ikke relevant, minimumsgrupper og komplementær skjulning.
 - Rapport uden personidentifikatorer og handlingsstatus.
 - Ens oversættelsesnøgler i dansk, engelsk og grønlandsk.
@@ -110,4 +109,4 @@ Der er ingen automatisk mailverifikation eller selvbetjent glemt-adgangskode-mai
 
 ## Test med få medarbejdere
 
-Opret en kladde, vælg kun dine testmedarbejdere, og aktivér. Grunddata bevares til den rigtige undersøgelse. Luk testen, før du aktiverer næste undersøgelse. Rapporternes grænse på fem svar gælder også ved tests. Eksisterende kladder uden et gemt deltagervalg viser alle nuværende medarbejdere markeret; gem et eksplicit valg før aktivering.
+Opret og aktivér en undersøgelse, og send linket til dine testmedarbejdere. Du kan se afdelingsscorer selv ved én besvarelse, mens afdelingernes svarantal er skjult. Luk testen før næste undersøgelse aktiveres. Konti, svar og tidligere deltagerdata bevares ved opdatering; den gamle `an2_employees`-tabel bruges ikke længere. Der kræves ingen ny databasemigration.
