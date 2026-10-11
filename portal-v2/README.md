@@ -110,3 +110,7 @@ Der er ingen e-mailverifikation eller kontrol af ansættelse. Enhver med det akt
 ## Test med få medarbejdere
 
 Opret og aktivér en undersøgelse, og send linket til dine testmedarbejdere. Du kan se afdelingsscorer selv ved én besvarelse, mens afdelingernes svarantal er skjult. Luk testen før næste undersøgelse aktiveres. Konti, svar og tidligere deltagerdata bevares ved opdatering; den gamle `an2_employees`-tabel bruges ikke længere. Der kræves ingen ny databasemigration.
+
+## Brugere og adgang
+
+Den oprindelige administrator er portalens ejer. Under **Brugere og adgang** kan ejeren gøre allerede registrerede brugere til administratorer og fjerne administratoradgang igen. Andre administratorer kan administrere undersøgelser, rapporter, afdelinger og handlinger, men ikke brugerroller. Ejeren kan ikke nedgraderes. Rolleændringer logger brugeren ud; ved næste login bruges samme e-mail og adgangskode. Egne undersøgelsessvar bevares og kan fortsat åbnes via undersøgelseslinket. Udgivelsen anvender migration 0002 automatisk.

@@ -1,3 +1,10 @@
+# 2.3.0
+
+- Brugere og adgang: ejeren kan give og fjerne administratoradgang for eksisterende konti.
+- Den oprindelige administrator bevares som ejer og kan ikke nedgraderes.
+- Rolleændringer afslutter brugerens sessioner; adgangskoder og egne undersøgelsessvar bevares.
+- Administratorer kan fortsat deltage via undersøgelseslinket.
+
 # 2.2.0
 
 - Selvtilmelding via fælles link med e-mail, adgangskode og eget afdelingsvalg.
