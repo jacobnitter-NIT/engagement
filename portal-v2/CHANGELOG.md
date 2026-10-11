@@ -1,3 +1,9 @@
+# 2.0.1
+
+- Privat opsætningslink genereres automatisk under release.
+- Intet nøglefelt på første konto-oprettelse; vælg blot e-mail og adgangskode.
+- Eksplícit Wrangler-konfiguration i alle kommandoer.
+
 # 2.0.0
 
 - Ny Worker og frontend bygget fra bunden.

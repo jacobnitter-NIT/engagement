@@ -28,21 +28,13 @@ npm run release
 
 Hvis du har ændringer i det gamle projekt, kan de blive liggende: de nye filer ligger i deres egen mappe. Hvis Git melder konflikt, stop og læs fejlteksten; kassér ikke dine ændringer.
 
-Åbn https://autonord-engagement.jacobnitter.workers.dev efter vellykket deploy. Portalen viser **Opret din administratorkonto**.
+Efter vellykket `release` viser terminalen et **privat opsætningslink**. Åbn linket, og opret din administratorkonto med e-mail, adgangskode og gentagelse af adgangskoden. Der er intet felt til en opsætningsnøgle, og du skal ikke selv vælge eller indtaste en lang nøgle.
 
-- **Opsætningsnøgle:** brug værdien af den eksisterende Cloudflare-secret `ADMIN_PASSWORD`. Denne secret er allerede på den nuværende Worker. Alternativt kan der bruges en separat `SETUP_TOKEN`.
-- **E-mail:** den e-mail du ønsker at bruge til dit nye login.
-- **Adgangskode:** vælg en ny adgangskode med mindst 12 tegn og gentag den.
+`release` genererer nøglen kryptografisk og gemmer den i Cloudflare via den allerede godkendte Wrangler-session. Nøglen findes i linkets URL-fragment, som ikke sendes i GET-requests eller HTTP-accesslogs. Browseren fjerner fragmentet fra adresselinjen ved åbning og anvender nøglen i baggrunden ved konto-oprettelse. Opbevar linket privat, indtil kontoen er oprettet. Hvis du genindlæser siden før oprettelsen, skal du åbne det oprindelige opsætningslink igen.
 
-Nøglen kontrolleres kun under førstegangsoprettelsen. Derefter bruges den nye konto med saltet PBKDF2-hash. En forkert `ADMIN_EMAIL` i Cloudflare har ingen betydning for den nye portal. Opret aldrig nøgler eller adgangskoder i repository.
+Kun den første administratorkonto kan oprettes med linket. Når kontoen findes, afvises alle efterfølgende opsætningsforsøg, og portalen viser normalt login. Senere `release` viser blot login-adressen, hvis den kan verificere, at kontoen allerede findes.
 
-Hvis opsætningsnøglen mangler, kør interaktivt i `portal-v2`:
-
-```bash
-npx wrangler secret put SETUP_TOKEN
-```
-
-Skriv en hemmelig nøgle på mindst 24 tegn, når terminalen spørger, og brug den på opsætningssiden. Indtast ikke nøglen som en kommando eller i chatten.
+Cloudflare-login med Google fungerer fortsat. Det bruges til udgivelse; portalens almindelige login bruger kontoen i databasen. `ADMIN_EMAIL` bruges ikke til portal-login.
 
 ## Cloudflare med GitHub-integration
 
@@ -56,15 +48,17 @@ Brug en **Worker** med GitHub repository `jacobnitter-NIT/engagement`, produktio
 | D1 binding | `DB` |
 | D1 database | `autonord-engagement` |
 | Database ID | `482cad6e-1fe7-4fd6-820e-d3b37a7ed89a` |
-| Runtime setup secret | eksisterende `ADMIN_PASSWORD`, eller `SETUP_TOKEN` |
+| Runtime setup secret | `SETUP_TOKEN` oprettes automatisk af `npm run release` |
 
 Konfigurationen ligger direkte i `wrangler.jsonc`; der genereres ingen konfiguration i `dist/server`. Installerede pakker fastlåses med `package-lock.json`. Wrangler er låst til den testede version 4.92.0.
+
+Første opsætning udføres fra Codespace med `npm run release`, som viser dit private link.
 
 GitHub-workflowet `Autonord People checks` kører tests automatisk ved ændringer i `portal-v2`. Cloudflare Git integration håndterer udgivelse. Der er ikke et ekstra GitHub-workflow, som deployer oveni.
 
 ## Brug portalen
 
-1. Opret din administratorkonto én gang.
+1. Åbn opsætningslinket fra `npm run release`, og opret din administratorkonto én gang.
 2. I **Organisation**: tilføj medarbejdernes e-mails til Værksted, Pladeværksted, Administration eller Lager. Tilføj andre afdelinger efter behov. Flere e-mails kan indsættes samlet.
 3. I **Undersøgelser**: rediger årets kladde, tilføj egne spørgsmål og oversæt alle spørgsmål. Forhåndsvis hele spørgerammen. Gem dine ændringer.
 4. Få de grønlandske tekster gennemgået af en kvalificeret sprogbruger, og markér godkendelsen. De indbyggede tekster er udkast.

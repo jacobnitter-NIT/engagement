@@ -6,7 +6,7 @@
     "test": "node --test tests/portal.test.mjs", "build": "npm run check",
     "deploy:check": "npm run check && npm test && wrangler deploy --dry-run --config wrangler.jsonc",
     "db:migrate": "wrangler d1 migrations apply DB --remote --config wrangler.jsonc",
-    "deploy": "wrangler deploy --config wrangler.jsonc", "release": "npm run deploy:check && npm run db:migrate && npm run deploy"
+    "deploy": "wrangler deploy --config wrangler.jsonc", "release": "node scripts/release.mjs"
   },
   "devDependencies": {"wrangler": "4.92.0"}
 }
